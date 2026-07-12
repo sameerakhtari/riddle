@@ -67,10 +67,9 @@ pen. (Or install it from the **Store** app right on the tablet.)
 - **This repository** — the app (Rust). Pen input, ink surface, handwriting
   synthesis (rasterize → Zhang-Suen thinning → stroke tracing → animated
   replay), the oracle process manager, and both display backends.
-- **[Quill](https://github.com/MaximeRivest/quill)** — the sibling takeover display host (C/C++). An
-  [epfb-re](https://github.com/asivery/epfb-re)-style QImage-constructor
-  interposition shim over the vendor `libqsgepaper.so` waveform engine,
-  exposed as a small C ABI (`quill_init` / `quill_buffer` / `quill_swap`)
+- **[Quill](https://github.com/MaximeRivest/quill)** — the sibling takeover display host (C/C++). A
+  clean-room, MIT-licensed adapter over the vendor `libqsgepaper.so` waveform
+  engine, exposed as a small C ABI (`quill_init` / `quill_buffer` / `quill_swap`)
   that riddle links against with `--features takeover`. Also carries a small
   family of demos (`scribble`, a pen-to-glass latency test, plus map, image,
   and GIF renderers).
