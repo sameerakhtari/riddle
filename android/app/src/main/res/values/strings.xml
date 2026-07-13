@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Riddle Diary</string>
+    <string name="app_name">Tom Riddle Diary</string>
     <string name="diary_title">The Diary</string>
     <string name="hint_write">Write with the S Pen, then ask the diary.</string>
     <string name="undo">Undo</string>

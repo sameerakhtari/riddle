@@ -559,7 +559,7 @@ class ModelLibraryActivity : Activity() {
                 val dialog = ProgressDialog.show(
                     this,
                     "Importing model",
-                    "Copying the model into Riddle Diary…",
+                    "Copying the model into Tom Riddle Diary…",
                     true,
                     false,
                 )

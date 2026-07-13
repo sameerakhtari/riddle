@@ -1,8 +1,8 @@
-# Riddle Diary Privacy Policy
+# Tom Riddle Diary Privacy Policy
 
 **Effective date: 13 July 2026**
 
-Riddle Diary is designed to keep users in control of handwritten pages, conversations, model files, provider credentials, memory, and diagnostics.
+Tom Riddle Diary is designed to keep users in control of handwritten pages, conversations, model files, provider credentials, memory, and diagnostics.
 
 ## Data stored on the device
 
@@ -12,7 +12,7 @@ The Android app can store unfinished S Pen strokes, rendered page images, conver
 
 - **Writing only** and **On-device model** modes do not send diary pages to an AI endpoint.
 - **Private backend**, **Direct API**, and **Local server** modes send the current page image and relevant conversation context to the endpoint configured by the user so that it can generate an answer.
-- The selected provider or server has its own privacy and retention terms. Riddle Diary does not silently choose an endpoint.
+- The selected provider or server has its own privacy and retention terms. Tom Riddle Diary does not silently choose an endpoint.
 - The model catalog and model-download features contact the HTTPS URLs displayed or entered by the user.
 
 ## Credentials

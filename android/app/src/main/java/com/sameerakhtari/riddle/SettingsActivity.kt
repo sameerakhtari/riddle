@@ -92,7 +92,7 @@ class SettingsActivity : Activity() {
             }
         }
         findViewById<TextView>(R.id.aboutText).text =
-            "Riddle Diary ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})\n" +
+            "Tom Riddle Diary ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})\n" +
                 "No .env file is needed to build the Android app. Provider configuration is entered here after installation. " +
                 "backend/.env is used only for the optional private backend."
     }

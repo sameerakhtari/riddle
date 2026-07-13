@@ -19,7 +19,7 @@ class GuideActivity : Activity() {
 
     companion object {
         private const val GUIDE_HTML = """
-            <h1>Riddle Diary Guide</h1>
+            <h1>Tom Riddle Diary Guide</h1>
 
             <h2>Write and ask</h2>
             <p>Write naturally inside the parchment with the S Pen. Keep finger drawing disabled for palm rejection. Pause for the configured delay or tap the gold <b>Ask</b> button. The complete answer is generated first; only then does it appear slowly as settled fountain ink.</p>

@@ -1,6 +1,6 @@
-# Tom Riddle Diary — Android client
+# Tom Tom Riddle Diary — Android client
 
-The Android client is the current production platform for Tom Riddle Diary. It is optimized for Samsung Galaxy devices with an S Pen while remaining installable on other Android devices that provide stylus or touch input.
+The Android client is the current production platform for Tom Tom Riddle Diary. It is optimized for Samsung Galaxy devices with an S Pen while remaining installable on other Android devices that provide stylus or touch input.
 
 ## Core features
 

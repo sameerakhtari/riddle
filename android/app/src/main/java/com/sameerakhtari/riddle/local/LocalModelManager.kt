@@ -113,7 +113,7 @@ class LocalModelManager(private val context: Context) {
         val spec = catalog.find(modelId) ?: error("Unknown model.")
         require(spec.downloadable) { "This model has no download URL. Import its .litertlm file instead." }
         require(spec.supportsVision) {
-            "This catalog entry is text-only. Riddle Diary requires image input to read handwriting."
+            "This catalog entry is text-only. Tom Riddle Diary requires image input to read handwriting."
         }
         val network = if (settings.wifiOnlyModelDownload) NetworkType.UNMETERED else NetworkType.CONNECTED
         val request = OneTimeWorkRequestBuilder<ModelDownloadWorker>()
