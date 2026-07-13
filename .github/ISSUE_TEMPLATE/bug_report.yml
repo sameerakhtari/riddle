@@ -1,0 +1,40 @@
+name: Bug report
+description: Report a reproducible problem in the maintained app
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Remove API keys, tokens, private diary text, and personal information from logs before submitting.
+  - type: input
+    id: version
+    attributes:
+      label: App version
+      placeholder: "0.5.1"
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and Android version
+      placeholder: "Galaxy S22 Ultra, Android ..."
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Sanitized diagnostic excerpt
+      description: Do not include secrets or private diary content.
