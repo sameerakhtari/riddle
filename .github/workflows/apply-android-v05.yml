@@ -1,0 +1,100 @@
+name: Apply Android v0.5 quality migration
+
+on:
+  push:
+    branches:
+      - android-v05-quality-memory
+    paths:
+      - ".migration/**"
+      - ".github/workflows/apply-android-v05.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  migrate-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: android-v05-quality-memory
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Decode and apply Android migration
+        run: |
+          cat .migration/chunk* | base64 -d | gzip -d > /tmp/migrate_v05.py
+          python -m py_compile /tmp/migrate_v05.py
+          set +e
+          python /tmp/migrate_v05.py > MIGRATION_FAILURE.txt 2>&1
+          status=$?
+          cat MIGRATION_FAILURE.txt
+          if [ $status -ne 0 ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add MIGRATION_FAILURE.txt
+            git commit -m "Record Android v0.5 migration failure"
+            git push origin HEAD:android-v05-quality-memory
+            exit $status
+          fi
+          rm -f MIGRATION_FAILURE.txt
+
+      - name: Validate Android XML and backend syntax
+        run: |
+          python -m py_compile backend/app/main.py
+          python - <<'PY'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+          for path in Path('android/app/src/main/res').rglob('*.xml'):
+              ET.parse(path)
+          ET.parse('android/app/src/main/AndroidManifest.xml')
+          print('Android XML validation passed')
+          PY
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "9.4.1"
+
+      - name: Generate Gradle wrapper when absent
+        run: gradle -p android wrapper --gradle-version 9.4.1
+
+      - name: Build debug and release APKs
+        run: |
+          chmod +x android/gradlew
+          android/gradlew -p android :app:assembleDebug :app:assembleRelease --stacktrace
+
+      - name: Remove one-time migration files
+        run: rm -rf .migration .github/workflows/apply-android-v05.yml
+
+      - name: Commit migrated Android edition
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Add Android v0.5 direct answers, memory, instructions and performance fixes"
+          git push origin HEAD:android-v05-quality-memory
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: riddle-android-v05-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: riddle-android-v05-release-unsigned-apk
+          path: android/app/build/outputs/apk/release/app-release-unsigned.apk
+          if-no-files-found: error
