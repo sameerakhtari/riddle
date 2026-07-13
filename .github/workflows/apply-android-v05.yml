@@ -20,13 +20,22 @@ jobs:
           ref: android-v05-quality-memory
           fetch-depth: 0
 
+      - name: Record migration run ID
+        run: |
+          printf '%s\n' "$GITHUB_RUN_ID" > ANDROID_MIGRATION_RUN_ID.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ANDROID_MIGRATION_RUN_ID.txt
+          git commit -m "Record Android migration run [skip ci]"
+          git push origin HEAD:android-v05-quality-memory
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
       - name: Import Android source bundle
         env:
-          SOURCE_URL: "https://sdmntpraustraliaeast.oaiusercontent.com/files/00000000-ba30-71fa-b897-b08f694e884a/raw?se=2026-07-13T15:14:49Z&sp=r&sv=2026-02-06&sr=b&scid=bcc26666-06b6-5249-b72b-bf011f2c8f48&skoid=b7fc319f-b93c-4fac-ba5f-14fdc3f9209f&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-07-13T00:47:48Z&ske=2026-07-15T00:47:48Z&sks=b&skv=2026-02-06&sig=MT%2BxpG9Vo9/Jk1LKobok9/dLk%2BFO66dC9LnOZBWuhy8%3D"
+          SOURCE_URL: "https://sdmntpraustraliaeast.oaiusercontent.com/files/00000000-5890-71fa-96df-d25e5cca2843/raw?se=2026-07-13T15:16:36Z&sp=r&sv=2026-02-06&sr=b&scid=10a70ad9-8d21-5b2f-b49b-03ff0e23baf4&skoid=b7fc319f-b93c-4fac-ba5f-14fdc3f9209f&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-07-13T02:00:28Z&ske=2026-07-15T02:00:28Z&sks=b&skv=2026-02-06&sig=AcFJgmsf0rHLDnfkN3NMI4ndany1dPcqpvhyVItmvIg%3D"
         run: |
           curl --fail --location --retry 3 --output /tmp/source.zip "$SOURCE_URL"
           mkdir -p /tmp/source-artifact
@@ -96,7 +105,7 @@ jobs:
           android/gradlew -p android :app:assembleDebug :app:assembleRelease --stacktrace
 
       - name: Remove one-time migration files
-        run: rm -rf .migration .source-import .source-import-safe .github/workflows/apply-android-v05.yml tools/migrate_v05.py tools/__pycache__ MIGRATION_FAILURE.txt
+        run: rm -rf .migration .source-import .source-import-safe .github/workflows/apply-android-v05.yml tools/migrate_v05.py tools/__pycache__ MIGRATION_FAILURE.txt ANDROID_MIGRATION_RUN_ID.txt
 
       - name: Commit migrated Android edition
         run: |
