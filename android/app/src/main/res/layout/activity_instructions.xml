@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/settings_background" android:fillViewport="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="18dp">
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:fontFamily="serif" android:text="Custom AI instructions"
+            android:textColor="@color/diary_gold_bright" android:textSize="29sp" android:textStyle="bold" />
+        <TextView style="@style/RiddleInfoText"
+            android:text="Paste or import a plain-text, Markdown, or JSON instruction set. It is stored locally and applied to on-device, API, backend, and LAN providers." />
+        <LinearLayout style="@style/RiddleSettingsPanel">
+            <EditText android:id="@+id/customInstructionsInput" style="@style/RiddleEditText"
+                android:layout_height="260dp" android:gravity="top|start" android:hint="Your response instructions"
+                android:inputType="textMultiLine|textCapSentences" android:maxLength="4000" />
+            <TextView android:id="@+id/instructionStatusText" style="@style/RiddleInfoText" />
+            <Button android:id="@+id/importInstructionsButton" style="@style/RiddlePrimaryButton"
+                android:layout_width="match_parent" android:layout_marginTop="10dp" android:text="Import instruction file" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" android:orientation="horizontal">
+                <Button android:id="@+id/resetInstructionsButton" style="@style/RiddleButton"
+                    android:layout_width="0dp" android:layout_weight="1" android:text="Use good default" />
+                <Button android:id="@+id/clearInstructionsButton" style="@style/RiddleButton"
+                    android:layout_width="0dp" android:layout_marginStart="8dp" android:layout_weight="1" android:text="Clear" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="18dp" android:orientation="horizontal">
+            <Button android:id="@+id/cancelInstructionsButton" style="@style/RiddleButton"
+                android:layout_width="0dp" android:layout_weight="1" android:text="Cancel" />
+            <Button android:id="@+id/saveInstructionsButton" style="@style/RiddlePrimaryButton"
+                android:layout_width="0dp" android:layout_marginStart="8dp" android:layout_weight="1" android:text="Save instructions" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

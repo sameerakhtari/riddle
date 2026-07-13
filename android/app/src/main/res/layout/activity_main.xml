@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootFrame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/diary_black"
+    android:keepScreenOn="false">
+
+    <com.sameerakhtari.riddle.ui.DiaryCanvasView
+        android:id="@+id/diaryCanvas"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="Full-screen parchment writing surface" />
+
+    <com.sameerakhtari.riddle.ui.ReplyInkView
+        android:id="@+id/replyInkView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:layout_gravity="top"
+        android:background="@drawable/toolbar_leather"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingEnd="58dp">
+
+        <Button android:id="@+id/historyButton" android:layout_width="44dp" android:layout_height="44dp" android:background="@drawable/tool_circle" android:contentDescription="Conversation history" android:minWidth="0dp" android:padding="0dp" android:text="☰" android:textAllCaps="false" android:textColor="@color/diary_gold_bright" android:textSize="21sp" />
+        <Button android:id="@+id/newConversationButton" android:layout_width="44dp" android:layout_height="44dp" android:layout_marginStart="5dp" android:background="@drawable/tool_circle" android:contentDescription="Start new conversation" android:minWidth="0dp" android:padding="0dp" android:text="＋" android:textAllCaps="false" android:textColor="@color/diary_gold_bright" android:textSize="21sp" />
+
+        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_marginStart="7dp" android:layout_marginEnd="7dp" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+            <TextView android:id="@+id/sessionTitleText" android:layout_width="match_parent" android:layout_height="wrap_content" android:ellipsize="end" android:fontFamily="serif" android:gravity="center" android:maxLines="1" android:text="RIDDLE DIARY" android:textAllCaps="true" android:textColor="@color/diary_gold_bright" android:textSize="17sp" android:textStyle="bold" />
+            <TextView android:id="@+id/statusText" android:layout_width="match_parent" android:layout_height="wrap_content" android:ellipsize="end" android:gravity="center" android:maxLines="1" android:text="@string/hint_write" android:textColor="@color/diary_muted" android:textSize="9sp" />
+        </LinearLayout>
+
+        <Button android:id="@+id/settingsButton" android:layout_width="44dp" android:layout_height="44dp" android:background="@drawable/tool_circle" android:contentDescription="Settings" android:minWidth="0dp" android:padding="0dp" android:text="⚙" android:textAllCaps="false" android:textColor="@color/diary_gold_bright" android:textSize="19sp" />
+    </LinearLayout>
+
+    <HorizontalScrollView android:id="@+id/toolDock" android:layout_width="match_parent" android:layout_height="64dp" android:layout_gravity="bottom" android:background="@drawable/toolbar_leather" android:fillViewport="true" android:paddingStart="8dp" android:paddingEnd="8dp" android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center" android:orientation="horizontal">
+            <Button android:id="@+id/undoButton" style="@style/RiddleRoundToolButton" android:contentDescription="Undo" android:text="↶" />
+            <Button android:id="@+id/redoButton" style="@style/RiddleRoundToolButton" android:layout_marginStart="8dp" android:contentDescription="Redo" android:text="↷" />
+            <Button android:id="@+id/penButton" style="@style/RiddleRoundToolButton" android:layout_marginStart="8dp" android:contentDescription="Fountain pen" android:text="✒" />
+            <Button android:id="@+id/eraserButton" style="@style/RiddleRoundToolButton" android:layout_marginStart="8dp" android:contentDescription="Eraser" android:text="◇" />
+            <Button android:id="@+id/clearButton" style="@style/RiddleRoundToolButton" android:layout_marginStart="8dp" android:contentDescription="Clear page" android:text="⌫" />
+            <Button android:id="@+id/askButton" style="@style/RiddleRoundPrimaryButton" android:layout_marginStart="8dp" android:contentDescription="Ask the diary" android:text="✦" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <Button android:id="@+id/chromeButton" android:layout_width="44dp" android:layout_height="44dp" android:layout_gravity="top|end" android:layout_marginTop="7dp" android:layout_marginEnd="7dp" android:background="@drawable/tool_circle_primary" android:contentDescription="Hide diary controls" android:elevation="12dp" android:minWidth="0dp" android:padding="0dp" android:text="×" android:textAllCaps="false" android:textColor="@color/diary_gold_bright" android:textSize="23sp" />
+
+    <FrameLayout android:id="@+id/bookCoverOverlay" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/book_cover_surface" android:clickable="false" android:focusable="false" android:importantForAccessibility="no">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="center" android:gravity="center" android:orientation="vertical" android:padding="28dp">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="serif" android:letterSpacing="0.10" android:text="RIDDLE DIARY" android:textColor="@color/diary_gold_bright" android:textSize="30sp" android:textStyle="bold" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:text="Touch ink to parchment" android:textColor="@color/diary_muted" android:textSize="14sp" />
+        </LinearLayout>
+    </FrameLayout>
+</FrameLayout>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/settings_background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="18dp"
+        android:paddingTop="22dp"
+        android:paddingEnd="18dp"
+        android:paddingBottom="40dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/settings_header_background"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:text="Riddle Diary"
+                android:textColor="@color/diary_gold_bright"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Configure the answer engine, enchanted voice, memory, S Pen, parchment, privacy, and diagnostics."
+                android:textColor="@color/diary_muted"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <TextView style="@style/RiddleSectionTitle" android:text="AI provider" />
+
+        <LinearLayout style="@style/RiddleSettingsPanel">
+            <TextView style="@style/RiddlePanelTitle" android:text="Answer engine" />
+            <Spinner android:id="@+id/providerSpinner" style="@style/RiddleSpinner" />
+            <TextView android:id="@+id/providerHelp" style="@style/RiddleInfoText" />
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/proxySection" style="@style/RiddleSettingsPanel">
+            <TextView style="@style/RiddlePanelTitle" android:text="Private Riddle backend" />
+            <TextView style="@style/RiddleInfoText" android:text="Recommended for billed cloud keys. The provider key stays on your server or Mac." />
+            <EditText android:id="@+id/proxyUrlInput" style="@style/RiddleEditText" android:hint="Backend URL" android:inputType="textUri" />
+            <EditText android:id="@+id/proxyTokenInput" style="@style/RiddleEditText" android:hint="App token" android:inputType="textPassword" />
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/directSection" style="@style/RiddleSettingsPanel">
+            <TextView style="@style/RiddlePanelTitle" android:text="Direct OpenAI-compatible API" />
+            <TextView style="@style/RiddleWarningText" android:text="Convenient, but a valuable API key is safer behind the private backend." />
+            <EditText android:id="@+id/directBaseInput" style="@style/RiddleEditText" android:hint="API base URL" android:inputType="textUri" />
+            <EditText android:id="@+id/directKeyInput" style="@style/RiddleEditText" android:hint="API key" android:inputType="textPassword" />
+            <EditText android:id="@+id/directModelInput" style="@style/RiddleEditText" android:hint="Vision-capable model ID" android:inputType="text" />
+            <Button android:id="@+id/loadDirectModelsButton" style="@style/RiddleButton" android:layout_width="match_parent" android:layout_marginTop="8dp" android:text="Load available models from API" />
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/localServerSection" style="@style/RiddleSettingsPanel">
+            <TextView style="@style/RiddlePanelTitle" android:text="Local or LAN AI server" />
+            <TextView style="@style/RiddleInfoText" android:text="Uses a vision-capable OpenAI-compatible server. The app can query its /models endpoint." />
+            <EditText android:id="@+id/localServerBaseInput" style="@style/RiddleEditText" android:hint="Server base URL" android:inputType="textUri" />
+            <EditText android:id="@+id/localServerTokenInput" style="@style/RiddleEditText" android:hint="Optional bearer token" android:inputType="textPassword" />
+            <EditText android:id="@+id/localServerModelInput" style="@style/RiddleEditText" android:hint="Vision-capable server model ID" android:inputType="text" />
+            <Button android:id="@+id/loadLocalModelsButton" style="@style/RiddleButton" android:layout_width="match_parent" android:layout_marginTop="8dp" android:text="Load available models from server" />
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/onDeviceSection" style="@style/RiddleSettingsPanel">
+            <TextView style="@style/RiddlePanelTitle" android:text="On-device AI" />
+            <TextView android:id="@+id/activeModelText" style="@style/RiddleInfoText" android:textIsSelectable="true" />
+            <TextView style="@style/RiddleFieldLabel" android:text="Inference backend" />
+            <Spinner android:id="@+id/modelBackendSpinner" style="@style/RiddleSpinner" />
+            <Button android:id="@+id/modelLibraryButton" style="@style/RiddlePrimaryButton" android:layout_width="match_parent" android:layout_marginTop="10dp" android:text="Open complete model library" />
+        </LinearLayout>
+
+        <TextView style="@style/RiddleSectionTitle" android:text="Diary voice and memory" />
+
+        <LinearLayout style="@style/RiddleSettingsPanel">
+            <TextView style="@style/RiddlePanelTitle" android:text="Provider-independent answer wrapper" />
+            <TextView style="@style/RiddleInfoText" android:text="This instruction layer is applied to on-device, cloud, backend, and LAN models so answers keep the same factual diary character." />
+            <TextView style="@style/RiddleFieldLabel" android:text="Voice" />
+            <Spinner android:id="@+id/diaryVoiceSpinner" style="@style/RiddleSpinner" />
+            <TextView style="@style/RiddleFieldLabel" android:text="Answer length" />
+            <Spinner android:id="@+id/answerLengthSpinner" style="@style/RiddleSpinner" />
+            <TextView style="@style/RiddleFieldLabel" android:text="Answer format" />
+            <Spinner android:id="@+id/answerStyleSpinner" style="@style/RiddleSpinner" />
+            <TextView android:id="@+id/instructionsSummaryText" style="@style/RiddleInfoText" />
+            <Button android:id="@+id/openInstructionsButton" style="@style/RiddlePrimaryButton"
+                android:layout_width="match_parent" android:layout_marginTop="8dp" android:text="Attach or edit AI instructions" />
+            <CheckBox android:id="@+id/crossSessionMemoryCheck" style="@style/RiddleCheckBox" android:text="Use relevant context across conversations" />
+            <CheckBox android:id="@+id/automaticMemoryCheck" style="@style/RiddleCheckBox" android:text="Let successful answers suggest durable memory facts" />
+            <Button android:id="@+id/openMemoryButton" style="@style/RiddleButton" android:layout_width="match_parent" android:layout_marginTop="8dp" android:text="View and edit remembered facts" />
+        </LinearLayout>
+
+        <TextView style="@style/RiddleSectionTitle" android:text="Page behaviour" />
+
+        <LinearLayout style="@style/RiddleSettingsPanel">
+            <CheckBox android:id="@+id/fullscreenCheck" style="@style/RiddleCheckBox" android:text="Immersive full screen" />
+            <CheckBox android:id="@+id/bookAnimationCheck" style="@style/RiddleCheckBox" android:text="Open with a short book-cover animation" />
+            <CheckBox android:id="@+id/autoWarmModelCheck" style="@style/RiddleCheckBox" android:text="Prepare compact local models when the diary opens" />
+            <TextView style="@style/RiddleInfoText" android:text="Large experimental models are never prepared automatically; they load only after you tap Ask." />
+            <CheckBox android:id="@+id/screenshotsCheck" style="@style/RiddleCheckBox" android:text="Allow screenshots and screen recording" />
+            <CheckBox android:id="@+id/autoSubmitCheck" style="@style/RiddleCheckBox" android:text="Automatically ask after the pen rests" />
+            <EditText android:id="@+id/autoDelayInput" style="@style/RiddleEditText" android:hint="Auto-read delay in milliseconds" android:inputType="number" />
+            <CheckBox android:id="@+id/fingerCheck" style="@style/RiddleCheckBox" android:text="Allow finger drawing (leave off for palm rejection)" />
+        </LinearLayout>
+
+        <TextView style="@style/RiddleSectionTitle" android:text="S Pen" />
+
+        <LinearLayout style="@style/RiddleSettingsPanel">
+            <CheckBox android:id="@+id/spenGesturesCheck" style="@style/RiddleCheckBox" android:text="Enable hover-button directional gestures" />
+            <TextView style="@style/RiddleInfoText" android:text="Hold the button while hovering: left undo, right redo, up Ask, down hide/show controls. Support varies by Samsung firmware." />
+            <TextView style="@style/RiddleFieldLabel" android:text="Short hover-button press" />
+            <Spinner android:id="@+id/penButtonActionSpinner" style="@style/RiddleSpinner" />
+        </LinearLayout>
+
+        <TextView style="@style/RiddleSectionTitle" android:text="Fountain ink and parchment" />
+
+        <LinearLayout style="@style/RiddleSettingsPanel">
+            <TextView android:id="@+id/penWidthValue" style="@style/RiddleFieldLabel" android:text="Fountain-pen width" />
+            <SeekBar android:id="@+id/penWidthSeek" android:layout_width="match_parent" android:layout_height="wrap_content" android:max="180" />
+            <TextView android:id="@+id/pressureValue" style="@style/RiddleFieldLabel" android:text="Pressure and speed variation" />
+            <SeekBar android:id="@+id/pressureSeek" android:layout_width="match_parent" android:layout_height="wrap_content" android:max="150" />
+            <TextView android:id="@+id/replySpeedValue" style="@style/RiddleFieldLabel" android:text="Reply writing speed" />
+            <SeekBar android:id="@+id/replySpeedSeek" android:layout_width="match_parent" android:layout_height="wrap_content" android:max="124" />
+            <EditText android:id="@+id/replyDelayInput" style="@style/RiddleEditText" android:hint="Pause before reply ink appears (milliseconds)" android:inputType="number" />
+            <TextView style="@style/RiddleFieldLabel" android:text="Parchment" />
+            <Spinner android:id="@+id/paperThemeSpinner" style="@style/RiddleSpinner" />
+            <TextView style="@style/RiddleFieldLabel" android:text="Your ink" />
+            <Spinner android:id="@+id/userInkSpinner" style="@style/RiddleSpinner" />
+            <TextView style="@style/RiddleFieldLabel" android:text="Answer ink" />
+            <Spinner android:id="@+id/replyInkSpinner" style="@style/RiddleSpinner" />
+        </LinearLayout>
+
+        <TextView style="@style/RiddleSectionTitle" android:text="Diagnostics" />
+
+        <LinearLayout style="@style/RiddleSettingsPanel">
+            <CheckBox android:id="@+id/loggingCheck" style="@style/RiddleCheckBox" android:text="Keep a local diagnostic log" />
+            <TextView style="@style/RiddleInfoText" android:text="Logs automatically truncate at the selected limit and do not deliberately include keys or tokens." />
+            <Spinner android:id="@+id/logSizeSpinner" style="@style/RiddleSpinner" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:orientation="horizontal">
+                <Button android:id="@+id/viewLogsButton" style="@style/RiddleButton" android:layout_width="0dp" android:layout_weight="1" android:text="View / export logs" />
+                <Button android:id="@+id/clearLogsButton" style="@style/RiddleButton" android:layout_width="wrap_content" android:layout_marginStart="8dp" android:text="Clear logs" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView style="@style/RiddleSectionTitle" android:text="Privacy, guide and about" />
+
+        <LinearLayout style="@style/RiddleSettingsPanel">
+            <Button android:id="@+id/privacyPolicyButton" style="@style/RiddlePrimaryButton" android:layout_width="match_parent" android:text="Open readable privacy policy" />
+            <Button android:id="@+id/openGuideButton" style="@style/RiddleButton" android:layout_width="match_parent" android:layout_marginTop="8dp" android:text="Open complete user guide" />
+            <TextView android:id="@+id/aboutText" style="@style/RiddleInfoText" android:layout_marginTop="12dp" android:textIsSelectable="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal">
+
+            <Button android:id="@+id/cancelSettingsButton" style="@style/RiddleButton" android:layout_width="0dp" android:layout_weight="1" android:text="Cancel" />
+            <Button android:id="@+id/saveSettingsButton" style="@style/RiddlePrimaryButton" android:layout_width="0dp" android:layout_marginStart="10dp" android:layout_weight="1" android:text="Save settings" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

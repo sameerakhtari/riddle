@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="diary_black">#090705</color>
+    <color name="diary_panel">#26160E</color>
+    <color name="diary_panel_translucent">#EE170E09</color>
+    <color name="diary_gold">#C99A4D</color>
+    <color name="diary_gold_bright">#EBCB82</color>
+    <color name="diary_ink">#29170D</color>
+    <color name="diary_page">#D3A160</color>
+    <color name="diary_text">#FFF1D4</color>
+    <color name="diary_muted">#D9C096</color>
+
+    <color name="settings_background">#0D0906</color>
+    <color name="settings_panel">#E7C894</color>
+    <color name="settings_panel_dark">#21140D</color>
+    <color name="settings_muted">#4E3728</color>
+    <color name="settings_warning">#7A281D</color>
+
+    <color name="privacy_background">#F5E3BD</color>
+    <color name="privacy_surface">#FFF7E6</color>
+    <color name="privacy_text">#20140C</color>
+    <color name="privacy_heading">#4B2B16</color>
+    <color name="privacy_muted">#6B523E</color>
+    <color name="privacy_danger">#8B241E</color>
+
+    <color name="icon_background">#080706</color>
+</resources>

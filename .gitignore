@@ -4,3 +4,9 @@
 
 # Never commit a real API key.
 /oracle.env
+
+# Generated Python and Android build output.
+__pycache__/
+*.py[cod]
+/android/.gradle/
+/android/**/build/
