@@ -1,15 +1,27 @@
-name: Android build
+name: Product build
 
 on:
   push:
+    branches:
+      - main
+      - development
     paths:
       - "android/**"
       - "backend/**"
+      - "docs/**"
+      - "README.md"
+      - "PRIVACY_POLICY.md"
       - ".github/workflows/android.yml"
   pull_request:
+    branches:
+      - main
+      - development
     paths:
       - "android/**"
       - "backend/**"
+      - "docs/**"
+      - "README.md"
+      - "PRIVACY_POLICY.md"
       - ".github/workflows/android.yml"
 
 permissions:
@@ -47,12 +59,12 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: riddle-android-debug-apk
+          name: tom-riddle-diary-debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v4
         with:
-          name: riddle-android-release-unsigned-apk
+          name: tom-riddle-diary-release-unsigned-apk
           path: android/app/build/outputs/apk/release/app-release-unsigned.apk
           if-no-files-found: error

@@ -12,7 +12,7 @@ import httpx
 from fastapi import FastAPI, File, Form, Header, HTTPException, UploadFile
 from pydantic import BaseModel, Field
 
-app = FastAPI(title="Riddle Diary Oracle", version="0.5.0")
+app = FastAPI(title="Tom Riddle Diary Oracle", version="0.5.0")
 
 VOICE_INSTRUCTIONS = {
     "ENCHANTED_FACTUAL": (

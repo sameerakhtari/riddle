@@ -34,7 +34,7 @@ class RiddleApplication : Application() {
         val settings = AppSettings(this)
         AppLog.init(this)
         AppLog.configure(settings.diagnosticLoggingEnabled, settings.logMaxKb)
-        AppLog.i("Application", "Riddle Diary process started; ${memorySnapshot()}")
+        AppLog.i("Application", "Tom Riddle Diary process started; ${memorySnapshot()}")
         uiWatchdog.start()
         onDeviceOracle = OnDeviceOracle(this)
         SPenIntegration(this).register()
@@ -162,7 +162,7 @@ class RiddleApplication : Application() {
     }
 
     override fun onTerminate() {
-        AppLog.i("Application", "Riddle Diary process terminating")
+        AppLog.i("Application", "Tom Riddle Diary process terminating")
         uiWatchdog.stop()
         onDeviceOracle.close()
         warmExecutor.shutdownNow()

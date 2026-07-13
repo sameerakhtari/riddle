@@ -45,13 +45,13 @@ class PrivacyActivity : Activity() {
         private const val POLICY_HTML = """
             <h1>Privacy Policy</h1>
             <p><b>Effective date: 13 July 2026</b></p>
-            <p>Riddle Diary is designed to keep you in control of handwritten pages, conversations, model files, and provider credentials.</p>
+            <p>Tom Riddle Diary is designed to keep you in control of handwritten pages, conversations, model files, and provider credentials.</p>
 
             <h2>Information stored on this device</h2>
             <p>The app can store unfinished S Pen strokes, rendered page images, conversation transcripts, AI replies, conversation titles, compact memory facts, settings, downloaded model files, and bounded diagnostic logs. These files remain in the app's private storage unless you explicitly export a log, select a visible model folder, or uninstall/delete data.</p>
 
             <h2>When data leaves the device</h2>
-            <p><b>Writing only</b> and <b>on-device model</b> modes do not send diary pages to an AI provider. In Private Backend, Direct API, or Local Server mode, the current page image and relevant conversation context are sent to the endpoint you configured so it can generate an answer. That provider's own privacy terms apply. Riddle Diary does not silently choose an endpoint.</p>
+            <p><b>Writing only</b> and <b>on-device model</b> modes do not send diary pages to an AI provider. In Private Backend, Direct API, or Local Server mode, the current page image and relevant conversation context are sent to the endpoint you configured so it can generate an answer. That provider's own privacy terms apply. Tom Riddle Diary does not silently choose an endpoint.</p>
 
             <h2>Credentials</h2>
             <p>Direct API keys, backend tokens, local-server tokens, and Hugging Face tokens are encrypted at rest with Android Keystore. A rooted or compromised device can weaken mobile security, so a private backend is recommended for keys with significant billing access.</p>

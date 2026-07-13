@@ -67,7 +67,7 @@ object AppLog {
     }
 
     fun header(): String = buildString {
-        append("Riddle Diary ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})\n")
+        append("Tom Riddle Diary ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})\n")
         append("Android ${Build.VERSION.RELEASE} / API ${Build.VERSION.SDK_INT}\n")
         append("Device ${Build.MANUFACTURER} ${Build.MODEL}\n")
         append("Generated ${timestamp.format(Date())}\n\n")

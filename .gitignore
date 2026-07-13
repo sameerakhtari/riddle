@@ -1,12 +1,28 @@
-/target/
-/dist/
-*.log
-
-# Never commit a real API key.
+# Secrets
 /oracle.env
+/backend/.env
+*.jks
+*.keystore
 
-# Generated Python and Android build output.
+# Android
+/android/.gradle/
+/android/local.properties
+/android/**/build/
+/android/.idea/
+*.iml
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Python
 __pycache__/
 *.py[cod]
-/android/.gradle/
-/android/**/build/
+.venv/
+
+# Rust / preserved reMarkable build output
+/remarkable/target/
+/remarkable/dist/
+
+# Local diagnostics
+*.log
+.DS_Store
