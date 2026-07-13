@@ -83,7 +83,6 @@ class OnDeviceOracle(private val context: Context) : AutoCloseable {
                     Content.ImageFile(pageImage.absolutePath),
                     Content.Text(DiaryPrompt.localTranscriptionTask()),
                 ),
-                maxOutputToken = 180,
             ).toString()
         }
         val transcript = DiaryPrompt.parsePlainTranscript(transcriptRaw)
@@ -103,7 +102,6 @@ class OnDeviceOracle(private val context: Context) : AutoCloseable {
             engine = localEngine,
             system = DiaryPrompt.localAnswerSystem(voice, answerLength, answerStyle),
             prompt = DiaryPrompt.localAnswerTask(transcript, contextText, answerLength, answerStyle),
-            answerLength = answerLength,
             strict = answerStyle == AnswerStyle.VALUE_ONLY || voice == DiaryVoice.DIRECT,
         )
         var answer = DiaryPrompt.parsePlainAnswer(answerRaw, transcript, answerLength)
@@ -123,7 +121,6 @@ class OnDeviceOracle(private val context: Context) : AutoCloseable {
                     answerLength = answerLength,
                     answerStyle = answerStyle,
                 ),
-                answerLength = answerLength,
                 strict = true,
             )
             answer = DiaryPrompt.parsePlainAnswer(repairedRaw, transcript, answerLength)
@@ -143,7 +140,6 @@ class OnDeviceOracle(private val context: Context) : AutoCloseable {
                 engine = localEngine,
                 system = "You are a careful factual verifier. Return only the corrected final answer. Never add labels, JSON, commentary, or repeat the question.",
                 prompt = DiaryPrompt.localVerificationTask(transcript, answer, answerLength, answerStyle),
-                answerLength = answerLength,
                 strict = true,
             )
             val verified = DiaryPrompt.parsePlainAnswer(verifiedRaw, transcript, answerLength)
@@ -175,14 +171,8 @@ class OnDeviceOracle(private val context: Context) : AutoCloseable {
         engine: Engine,
         system: String,
         prompt: String,
-        answerLength: AnswerLength,
         strict: Boolean,
     ): String {
-        val maxTokens = when (answerLength) {
-            AnswerLength.BRIEF -> 120
-            AnswerLength.STANDARD -> 240
-            AnswerLength.DETAILED -> 420
-        }
         val config = ConversationConfig(
             systemInstruction = Contents.of(system),
             samplerConfig = SamplerConfig(
@@ -193,7 +183,7 @@ class OnDeviceOracle(private val context: Context) : AutoCloseable {
             ),
         )
         return engine.createConversation(config).use { conversation ->
-            conversation.sendMessage(prompt, maxOutputToken = maxTokens).toString()
+            conversation.sendMessage(prompt).toString()
         }
     }
 
