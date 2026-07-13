@@ -1,74 +1,69 @@
-# Riddle Diary Android app
+# Tom Riddle Diary — Android client
 
-Native full-screen Android diary for Samsung S-series / Ultra phones with an S Pen.
+The Android client is the current production platform for Tom Riddle Diary. It is optimized for Samsung Galaxy devices with an S Pen while remaining installable on other Android devices that provide stylus or touch input.
 
-## Visual and S Pen experience
+## Core features
 
-- Black-leather full-screen frame with a rough-edged aged parchment page.
-- Pressure, speed, and stroke-direction-aware fountain-pen ink.
-- Stylus-only mode by default for palm rejection.
-- Touch eraser, S Pen button eraser, undo, redo, clear, and configurable hover gestures.
-- The AI answer is completed in the background first, then slowly revealed as settled wet ink; no token-by-token chat typing is shown.
-- Unfinished writing is autosaved and never cleared by a failed request.
-- Screenshots and screen recording are allowed by default, with an optional secure-window toggle.
+- Immersive leather-and-parchment writing surface.
+- Stylus-only palm rejection by default.
+- Pressure, speed, and direction-aware fountain-pen rendering.
+- Pen, eraser, undo, redo, clear, S Pen button actions, and hover gestures.
+- Local draft autosave and recovery.
+- Conversation-based history and optional cross-conversation memory.
+- Imported custom response instructions.
+- Writing-only, on-device, local-server, private-proxy, and direct API modes.
+- Background model downloads, manual model import, CPU/GPU inference selection, and bounded diagnostics.
+- Full reply generation in the background followed by an ink-reveal animation.
 
-## Conversations and memory
+## Open in Android Studio
 
-History is organized by complete conversations rather than separate page messages. Tap the menu button to open, continue, or delete a conversation, and use the plus button for a clean session. Legacy pages are migrated into a **Previous pages** conversation.
+1. Open the repository's `android/` directory.
+2. Use JDK 17.
+3. Install Android SDK Platform 36 and Build Tools 36.0.0 when prompted.
+4. Connect an Android phone with USB debugging enabled.
+5. Select the `app` configuration and press **Run**.
 
-Current-conversation exchanges provide follow-up context. Optional cross-session memory can include compact durable facts and selected recent context. Memory is visible, editable, removable, and can be disabled independently of conversation history.
+Command-line build:
 
-## Provider-independent diary voice
+```bash
+cd android
+./gradlew :app:assembleDebug :app:assembleRelease
+```
 
-The same answer wrapper is applied to every provider:
+Outputs:
 
-- enchanted but factual;
-- plain direct;
-- scholarly journal;
-- warm companion.
+```text
+app/build/outputs/apk/debug/app-debug.apk
+app/build/outputs/apk/release/app-release-unsigned.apk
+```
 
-The wrapper prioritizes accuracy, does not impersonate a named fictional character, and does not invent magical claims. Answer length is also configurable.
+## Configuration
 
-## AI provider modes
+No `.env` file is required for the app. All runtime configuration is available under Settings:
 
-All choices are configured after installation in **Settings**:
+- AI provider mode
+- endpoint URL, token, key, and model
+- on-device model library
+- answer style and length
+- custom instruction file
+- memory controls
+- S Pen controls
+- appearance and reply animation
+- privacy and screenshot protection
+- diagnostics and log limits
 
-1. **Writing only** — no AI and no page network request.
-2. **Private Riddle backend** — safest option for a billed cloud API key.
-3. **Direct OpenAI-compatible API** — runtime URL/key/model fields, with `/models` discovery.
-4. **Local/OpenAI-compatible server** — vision model on the LAN, with `/models` discovery.
-5. **On-device model** — compatible LiteRT-LM vision model running on the phone.
+The Android package ID remains `com.sameerakhtari.riddle` so updates preserve installed data and downloaded models.
 
-The Android build needs no `.env`. `backend/.env` is only for the optional private backend service.
+## On-device AI
 
-## On-device model library
+The app uses LiteRT-LM packages with image input. A model appearing in a catalog does not guarantee compatibility with every phone or runtime version. On the Galaxy S22 Ultra, start with a smaller vision-capable E2B model and CPU inference before testing GPU.
 
-Open **Settings → Model library**.
+Model files are downloaded with WorkManager, can resume from partial files, and may be imported manually through Android Files.
 
-- Search registered models and filter for vision support.
-- Refresh an HTTPS JSON catalog.
-- Download in the background with WorkManager and partial-file resume.
-- Add arbitrary compatible HTTPS `.litertlm` URLs.
-- Import a previously downloaded `.litertlm` file through Android Files.
-- Choose CPU or GPU inference.
-- Select an optional visible folder and open it from the app.
+## Data
 
-A catalog entry is not a guarantee of runtime compatibility. The package must match the bundled LiteRT-LM version and include image input for handwritten pages.
+Handwriting, drafts, conversations, memory, logs, and model metadata are stored locally. The selected network provider receives the page and relevant context only when a network-backed mode is active. See the repository [privacy policy](../PRIVACY_POLICY.md).
 
-## Privacy and diagnostics
+## Release
 
-Settings contains a high-contrast readable privacy policy, local-data deletion, memory controls, screenshot protection, and bounded diagnostic logs. Logs automatically truncate between 256 KB and 4 MB and do not deliberately include keys or tokens.
-
-## Open on macOS
-
-1. Clone or pull the repository.
-2. Open the repository's `android` directory in Android Studio.
-3. Use JDK 17 and install Android SDK 36 if prompted.
-4. Connect the Samsung phone with USB debugging enabled.
-5. Click **Run**.
-
-GitHub Actions validates backend syntax and builds both `app-debug.apk` and a minified unsigned release APK.
-
-## Play Store preparation
-
-Before public release, create and protect a permanent signing key, generate a signed Android App Bundle, add a store listing and screenshots, publish the privacy policy at a stable URL, add a support contact, complete the Data safety form, test on real devices, and review rights for all names and artwork.
+The release build is minified but unsigned. Publishing requires a protected release keystore and a signed Android App Bundle. See [`../docs/RELEASES.md`](../docs/RELEASES.md).
