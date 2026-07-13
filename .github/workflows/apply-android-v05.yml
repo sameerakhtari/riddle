@@ -35,7 +35,7 @@ jobs:
 
       - name: Import Android source bundle
         env:
-          SOURCE_URL: "https://sdmntpraustraliaeast.oaiusercontent.com/files/00000000-9454-71fa-a9e8-bc190c25561b/raw?se=2026-07-13T15:28:58Z&sp=r&sv=2026-02-06&sr=b&scid=55f9cf8e-f23d-517f-9771-12f02b3388ef&skoid=b7fc319f-b93c-4fac-ba5f-14fdc3f9209f&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-07-13T01:31:58Z&ske=2026-07-15T01:31:58Z&sks=b&skv=2026-02-06&sig=s5jcYLfxcpe1Dzx5xfiljrjzo0Tbwp3nGCR4/F0USb8%3D"
+          SOURCE_URL: "https://sdmntprseasia.oaiusercontent.com/files/00000000-6c98-7207-9dec-6c790501c4b8/raw?se=2026-07-13T15:36:02Z&sp=r&sv=2026-02-06&sr=b&scid=dd484839-3667-5d7b-8b6e-c1183cd142f8&skoid=b7fc319f-b93c-4fac-ba5f-14fdc3f9209f&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-07-13T00:47:48Z&ske=2026-07-15T00:47:48Z&sks=b&skv=2026-02-06&sig=5KCZV7txdpIbRXlPeXnXXHSXhhMEHPOu64DbJg%2BCfaQ%3D"
         run: |
           curl --fail --location --retry 3 --output /tmp/source.zip "$SOURCE_URL"
           mkdir -p /tmp/source-artifact
@@ -117,14 +117,17 @@ jobs:
           fi
           rm -f BUILD_OUTPUT.txt BUILD_FAILURE.txt
 
-      - name: Remove one-time migration files
-        run: rm -rf .migration .source-import .source-import-safe .github/workflows/apply-android-v05.yml tools/migrate_v05.py tools/__pycache__ MIGRATION_FAILURE.txt ANDROID_MIGRATION_RUN_ID.txt BUILD_OUTPUT.txt BUILD_FAILURE.txt
+      - name: Clean migration scaffolding without changing workflows
+        run: |
+          rm -rf .migration .source-import .source-import-safe tools/migrate_v05.py tools/__pycache__
+          rm -f MIGRATION_FAILURE.txt ANDROID_MIGRATION_RUN_ID.txt BUILD_OUTPUT.txt BUILD_FAILURE.txt
+          rm -f .github/workflows/android.yml
 
       - name: Commit migrated Android edition
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
+          git add -A -- . ':!.github/workflows/apply-android-v05.yml'
           git commit -m "Add Android v0.5 direct answers, memory, instructions and performance fixes"
           git push origin HEAD:android-v05-quality-memory
 
