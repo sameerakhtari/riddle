@@ -1,0 +1,169 @@
+name: Apply structured reply regression fixes
+
+on:
+  push:
+    branches:
+      - fix/structured-replies
+    paths:
+      - ".github/workflows/apply-structured-reply-fix.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  patch-test-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/structured-replies
+          fetch-depth: 0
+
+      - name: Apply compile fix, regression tests, and version metadata
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          oracle = Path("android/app/src/main/java/com/sameerakhtari/riddle/network/OracleResult.kt")
+          text = oracle.read_text(encoding="utf-8")
+          marker = "    private fun unescape(value: String): String = value\n"
+          extension = '''    private fun String.substringBefore(delimiter: Regex): String {\n        val match = delimiter.find(this) ?: return this\n        return substring(0, match.range.first)\n    }\n\n'''
+          if extension not in text:
+              if marker not in text:
+                  raise RuntimeError("Could not locate OracleResult insertion point")
+              text = text.replace(marker, extension + marker, 1)
+              oracle.write_text(text, encoding="utf-8")
+
+          gradle = Path("android/app/build.gradle.kts")
+          text = gradle.read_text(encoding="utf-8")
+          text = text.replace("versionCode = 7", "versionCode = 8")
+          text = text.replace('versionName = "0.5.1"', 'versionName = "0.5.2"')
+          dependency = '    testImplementation("junit:junit:4.13.2")\n'
+          if dependency not in text:
+              text = text.replace(
+                  '    implementation("androidx.documentfile:documentfile:1.1.0")\n',
+                  '    implementation("androidx.documentfile:documentfile:1.1.0")\n' + dependency,
+              )
+          gradle.write_text(text, encoding="utf-8")
+
+          test = Path("android/app/src/test/java/com/sameerakhtari/riddle/network/DiaryPromptTest.kt")
+          test.parent.mkdir(parents=True, exist_ok=True)
+          test.write_text(r'''package com.sameerakhtari.riddle.network
+
+import com.sameerakhtari.riddle.data.AnswerLength
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Test
+
+class DiaryPromptTest {
+    @Test
+    fun repeatedSchemaEchoIsRejected() {
+        val raw = "Who are you? REPLY: The handwriting asks the question Who are you? " +
+            "REPLY: The text is a direct inquiry about the identity of the recipient. " +
+            "REPLY: The question is Who are you?"
+
+        val answer = DiaryPrompt.parsePlainAnswer(raw, "Who are you?", AnswerLength.BRIEF)
+
+        assertEquals("", answer)
+    }
+
+    @Test
+    fun repeatedFactualAnswerCollapsesToOneCopy() {
+        val raw = "REPLY: The speed of sound is approximately 343 m/s in dry air at 20 °C. " +
+            "REPLY: The speed of sound is approximately 343 m/s in dry air at 20 °C. " +
+            "REPLY: The speed of sound is approximately 343 m/s in dry air at 20 °C."
+
+        val answer = DiaryPrompt.parsePlainAnswer(raw, "What is the speed of sound?", AnswerLength.BRIEF)
+
+        assertEquals("The speed of sound is approximately 343 m/s in dry air at 20 °C.", answer)
+        assertFalse(answer.contains("REPLY:", ignoreCase = true))
+    }
+
+    @Test
+    fun plainValueRemainsUntouched() {
+        val answer = DiaryPrompt.parsePlainAnswer(
+            "299,792,458 m/s",
+            "What is the speed of light?",
+            AnswerLength.BRIEF,
+        )
+
+        assertEquals("299,792,458 m/s", answer)
+    }
+
+    @Test
+    fun transcriptParserStopsBeforeAnswerLabels() {
+        val transcript = DiaryPrompt.parsePlainTranscript(
+            "TRANSCRIPT: Who are you? REPLY: I am the assistant within this diary.",
+        )
+
+        assertEquals("Who are you?", transcript)
+    }
+
+    @Test
+    fun visibleReplySafetyRejectsMetadata() {
+        assertTrue(
+            DiaryPrompt.isUnsafeVisibleReply(
+                "REPLY: Hello TRANSCRIPT: Who are you?",
+                "Who are you?",
+            ),
+        )
+        assertFalse(
+            DiaryPrompt.isUnsafeVisibleReply(
+                "I am the assistant within this diary.",
+                "Who are you?",
+            ),
+        )
+    }
+}
+''', encoding="utf-8")
+
+          changelog = Path("CHANGELOG.md")
+          text = changelog.read_text(encoding="utf-8")
+          section = '''## 0.5.2 — Reliable local replies\n\n- Separated on-device handwriting transcription from answer generation.\n- Blocked structured metadata, repeated `REPLY:` labels, and echoed questions from the visible page.\n- Added fresh-conversation repair and factual verification for short value/date/unit answers.\n- Added parser regression tests based on real S22 Ultra failures.\n- Applied the same visible-answer safety gate to proxy and OpenAI-compatible providers.\n\n'''
+          if "## 0.5.2" not in text:
+              text = text.replace("# Changelog\n\n", "# Changelog\n\n" + section, 1)
+              changelog.write_text(text, encoding="utf-8")
+          PY
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate backend
+        run: python -m py_compile backend/app/main.py
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Test and build final app
+        run: |
+          chmod +x android/gradlew
+          if ! android/gradlew -p android :app:testDebugUnitTest :app:assembleDebug :app:assembleRelease --stacktrace > gradle-final.log 2>&1; then
+            tail -n 260 gradle-final.log
+            exit 1
+          fi
+          tail -n 80 gradle-final.log
+
+      - name: Commit validated source
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add android CHANGELOG.md
+          git commit -m "Finalize structured reply safeguards and tests"
+          git push origin HEAD:fix/structured-replies
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tom-riddle-diary-structured-reply-fix-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
