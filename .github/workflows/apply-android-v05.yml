@@ -35,7 +35,7 @@ jobs:
 
       - name: Import Android source bundle
         env:
-          SOURCE_URL: "https://sdmntpraustraliaeast.oaiusercontent.com/files/00000000-5890-71fa-96df-d25e5cca2843/raw?se=2026-07-13T15:16:36Z&sp=r&sv=2026-02-06&sr=b&scid=10a70ad9-8d21-5b2f-b49b-03ff0e23baf4&skoid=b7fc319f-b93c-4fac-ba5f-14fdc3f9209f&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-07-13T02:00:28Z&ske=2026-07-15T02:00:28Z&sks=b&skv=2026-02-06&sig=AcFJgmsf0rHLDnfkN3NMI4ndany1dPcqpvhyVItmvIg%3D"
+          SOURCE_URL: "https://sdmntpraustraliaeast.oaiusercontent.com/files/00000000-8594-71fa-9d2a-95f67c4bee35/raw?se=2026-07-13T15:21:47Z&sp=r&sv=2026-02-06&sr=b&scid=6fdc6782-f7c6-5162-bb7c-4a5a2f3dd0ec&skoid=b7fc319f-b93c-4fac-ba5f-14fdc3f9209f&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-07-13T02:24:49Z&ske=2026-07-15T02:24:49Z&sks=b&skv=2026-02-06&sig=Yz0PimgqnLQvJxEsK6U4ydK7M5vRZKO63KGXqn6x1DE%3D"
         run: |
           curl --fail --location --retry 3 --output /tmp/source.zip "$SOURCE_URL"
           mkdir -p /tmp/source-artifact
@@ -56,19 +56,7 @@ jobs:
           path.write_text(text)
           PY
           python -m py_compile tools/migrate_v05.py
-          set +e
-          python tools/migrate_v05.py > MIGRATION_FAILURE.txt 2>&1
-          status=$?
-          cat MIGRATION_FAILURE.txt
-          if [ $status -ne 0 ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add MIGRATION_FAILURE.txt
-            git commit -m "Record Android v0.5 migration failure"
-            git push origin HEAD:android-v05-quality-memory
-            exit $status
-          fi
-          rm -f MIGRATION_FAILURE.txt
+          python tools/migrate_v05.py
 
       - name: Validate Android XML and backend syntax
         run: |
@@ -101,11 +89,24 @@ jobs:
 
       - name: Build debug and release APKs
         run: |
+          set +e
           chmod +x android/gradlew
-          android/gradlew -p android :app:assembleDebug :app:assembleRelease --stacktrace
+          android/gradlew -p android :app:assembleDebug :app:assembleRelease --stacktrace > BUILD_OUTPUT.txt 2>&1
+          status=$?
+          tail -n 500 BUILD_OUTPUT.txt
+          if [ $status -ne 0 ]; then
+            tail -n 700 BUILD_OUTPUT.txt > BUILD_FAILURE.txt
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add BUILD_FAILURE.txt
+            git commit -m "Record Android v0.5 compiler failure"
+            git push origin HEAD:android-v05-quality-memory
+            exit $status
+          fi
+          rm -f BUILD_OUTPUT.txt BUILD_FAILURE.txt
 
       - name: Remove one-time migration files
-        run: rm -rf .migration .source-import .source-import-safe .github/workflows/apply-android-v05.yml tools/migrate_v05.py tools/__pycache__ MIGRATION_FAILURE.txt ANDROID_MIGRATION_RUN_ID.txt
+        run: rm -rf .migration .source-import .source-import-safe .github/workflows/apply-android-v05.yml tools/migrate_v05.py tools/__pycache__ MIGRATION_FAILURE.txt ANDROID_MIGRATION_RUN_ID.txt BUILD_OUTPUT.txt BUILD_FAILURE.txt
 
       - name: Commit migrated Android edition
         run: |
