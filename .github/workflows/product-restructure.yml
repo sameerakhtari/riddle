@@ -1,0 +1,129 @@
+name: Product-first repository restructure
+
+on:
+  push:
+    branches:
+      - development
+    paths:
+      - ".github/workflows/product-restructure.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  restructure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: development
+          fetch-depth: 0
+
+      - name: Preserve upstream implementation under remarkable
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          import shutil
+
+          root = Path.cwd()
+          remarkable = root / "remarkable"
+          remarkable.mkdir(exist_ok=True)
+
+          old_readme = (root / "README.md").read_text(encoding="utf-8")
+          old_readme = re.sub(
+              r"\n## Android / Samsung S Pen edition maintained in this fork.*?(?=\n## How it works)",
+              "\n",
+              old_readme,
+              flags=re.S,
+          )
+          old_readme = re.sub(
+              r"\nThis repository is a fork of MaximeRivest/riddle;.*?$",
+              "",
+              old_readme,
+              flags=re.S,
+          ).rstrip()
+
+          header = (
+              "# Original reMarkable implementation\n\n"
+              "> Preserved from the upstream project that this repository was forked from. "
+              "The active multi-platform product lives at the repository root. "
+              "The instructions below apply to the reMarkable implementation in this directory.\n\n"
+          )
+          (remarkable / "README.md").write_text(header + old_readme + "\n", encoding="utf-8")
+          if (root / "LICENSE").is_file():
+              shutil.copy2(root / "LICENSE", remarkable / "LICENSE")
+
+          workflows = root / ".github/workflows"
+          archived = remarkable / ".github/workflows"
+          archived.mkdir(parents=True, exist_ok=True)
+          for path in list(workflows.iterdir()):
+              if path.name in {"android.yml", "product-restructure.yml"}:
+                  continue
+              target = archived / path.name
+              if target.exists():
+                  target.unlink()
+              shutil.move(str(path), str(target))
+
+          keep = {
+              ".git", ".github", ".gitignore", ".editorconfig", "LICENSE",
+              "README.md", "PRIVACY_POLICY.md", "CHANGELOG.md", "CONTRIBUTING.md",
+              "SECURITY.md", "CODE_OF_CONDUCT.md", "NOTICE.md",
+              "android", "backend", "docs", "remarkable",
+          }
+          for entry in list(root.iterdir()):
+              if entry.name in keep:
+                  continue
+              target = remarkable / entry.name
+              if target.exists():
+                  raise RuntimeError(f"Destination already exists: {target}")
+              shutil.move(str(entry), str(target))
+
+          required = [
+              root / "android",
+              root / "backend",
+              remarkable / "README.md",
+          ]
+          missing = [str(path) for path in required if not path.exists()]
+          if missing:
+              raise RuntimeError(f"Missing required paths: {missing}")
+          print("Repository source layout reorganized")
+          PY
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate backend
+        run: python -m py_compile backend/app/main.py
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build Android client
+        run: |
+          chmod +x android/gradlew
+          android/gradlew -p android :app:assembleDebug :app:assembleRelease --stacktrace
+
+      - name: Commit product-first layout
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Reorganize repository around the maintained app"
+          git push origin HEAD:development
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: product-restructure-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
