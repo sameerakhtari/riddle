@@ -52,6 +52,9 @@ class MainActivity : Activity() {
     private val executor = Executors.newSingleThreadExecutor()
     private val mainHandler = Handler(Looper.getMainLooper())
     private val autoAskRunnable = Runnable { askDiary() }
+    private val draftSaveRunnable = Runnable { flushPendingDraft() }
+    private var pendingDraftStrokes: List<Stroke>? = null
+    private var pendingDraftSessionId: String = ""
     private var chromeVisible = true
 
     @Volatile
@@ -130,9 +133,17 @@ class MainActivity : Activity() {
         if (hasFocus) applyWindowPreferences()
     }
 
+    override fun onPause() {
+        mainHandler.removeCallbacks(draftSaveRunnable)
+        flushPendingDraft()
+        super.onPause()
+    }
+
     override fun onDestroy() {
         AppLog.i("Main", "MainActivity destroyed; changingConfigurations=$isChangingConfigurations")
         cancelAutoAsk()
+        mainHandler.removeCallbacks(draftSaveRunnable)
+        flushPendingDraft()
         executor.shutdown()
         super.onDestroy()
     }
@@ -284,7 +295,16 @@ class MainActivity : Activity() {
     }
 
     private fun persistDraft(strokes: List<Stroke>) {
-        val sessionId = pageStore.activeSession().id
+        pendingDraftStrokes = strokes
+        pendingDraftSessionId = pageStore.activeSession().id
+        mainHandler.removeCallbacks(draftSaveRunnable)
+        mainHandler.postDelayed(draftSaveRunnable, DRAFT_SAVE_DEBOUNCE_MS)
+    }
+
+    private fun flushPendingDraft() {
+        val strokes = pendingDraftStrokes ?: return
+        val sessionId = pendingDraftSessionId
+        pendingDraftStrokes = null
         executor.execute {
             runCatching {
                 if (strokes.isEmpty()) pageStore.clearDraft()
@@ -345,6 +365,8 @@ class MainActivity : Activity() {
             return
         }
 
+        mainHandler.removeCallbacks(draftSaveRunnable)
+        pendingDraftStrokes = null
         val strokes = canvas.snapshotStrokes()
         val userInkBottom = canvas.inkBottomFraction()
         val png = runCatching { canvas.exportPng() }.getOrElse { error ->
@@ -382,12 +404,21 @@ class MainActivity : Activity() {
                 val deterministicFacts = MemoryExtractor.fromTranscript(result.transcript)
                 val knownFacts = (stableFacts.filterNot { it.startsWith("[instruction] ") } +
                     deterministicFacts + result.memoryFacts).distinctBy(String::lowercase)
-                val finalResult = if (
+                val transcriptLower = result.transcript.lowercase()
+                val asksForIdentity = listOf(
+                    "what is my name", "who am i", "remember my name", "do you remember me",
+                ).any(transcriptLower::contains)
+                val hasSavedName = knownFacts.any { it.startsWith("User's name is", ignoreCase = true) }
+                val finalResult = when {
+                    asksForIdentity && hasSavedName ->
+                        result.copy(reply = MemoryExtractor.answerFromFacts(knownFacts))
                     MemoryExtractor.isMemoryQuestion(result.transcript) && knownFacts.isNotEmpty() &&
-                    MemoryExtractor.isMemoryDenial(result.reply)
-                ) {
-                    result.copy(reply = MemoryExtractor.answerFromFacts(knownFacts))
-                } else result
+                        MemoryExtractor.isMemoryDenial(result.reply) ->
+                        result.copy(reply = MemoryExtractor.answerFromFacts(knownFacts))
+                    MemoryExtractor.isMemoryDenial(result.reply) && deterministicFacts.isNotEmpty() ->
+                        result.copy(reply = MemoryExtractor.answerFromFacts(deterministicFacts))
+                    else -> result
+                }
                 pageStore.updateResult(
                     id = page.id,
                     transcript = finalResult.transcript,
@@ -596,5 +627,6 @@ class MainActivity : Activity() {
 
     companion object {
         private const val REQUEST_HISTORY = 8104
+        private const val DRAFT_SAVE_DEBOUNCE_MS = 420L
     }
 }

@@ -208,7 +208,8 @@ class DiaryCanvasView @JvmOverloads constructor(
         invalidate()
     }
 
-    fun snapshotStrokes(): List<Stroke> = strokes.map { it.deepCopy() }
+    /** Completed strokes are immutable after pen-up; a shallow list snapshot avoids O(n) deep copies per stroke. */
+    fun snapshotStrokes(): List<Stroke> = strokes.toList()
     fun isBlank(): Boolean = strokes.none { it.points.isNotEmpty() && it.tool == InkTool.PEN }
 
     fun inkBottomFraction(): Float = strokes
