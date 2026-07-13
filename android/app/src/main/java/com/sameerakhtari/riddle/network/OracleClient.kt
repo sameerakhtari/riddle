@@ -47,12 +47,15 @@ class OracleClient {
                 output.write("--$boundary--\r\n".toByteArray(StandardCharsets.UTF_8))
             }
             val json = JSONObject(readResponse(connection))
-            return OracleResult(
-                reply = DiaryPrompt.normalizeReply(json.optString("reply"), answerLength),
-                transcript = json.optString("transcript").trim(),
-                sessionTitle = json.optString("sessionTitle").trim(),
-                memoryFacts = json.optJSONArray("memoryFacts").toStringList(),
-            ).also { require(it.reply.isNotBlank()) { "The diary returned an empty reply." } }
+            return DiaryPrompt.sanitizeResultForDisplay(
+                OracleResult(
+                    reply = json.optString("reply"),
+                    transcript = json.optString("transcript").trim(),
+                    sessionTitle = json.optString("sessionTitle").trim(),
+                    memoryFacts = json.optJSONArray("memoryFacts").toStringList(),
+                ),
+                answerLength,
+            )
         } finally { connection.disconnect() }
     }
 
