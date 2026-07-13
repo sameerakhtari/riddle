@@ -52,10 +52,24 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      - name: Build debug and release APKs
+      - name: Test and build Android app
+        shell: bash
         run: |
           chmod +x android/gradlew
-          android/gradlew -p android :app:assembleDebug :app:assembleRelease --stacktrace
+          set +e
+          android/gradlew -p android \
+            :app:testDebugUnitTest \
+            :app:assembleDebug \
+            :app:assembleRelease \
+            --stacktrace > gradle-build.log 2>&1
+          result=$?
+          set -e
+          if [ "$result" -ne 0 ]; then
+            echo "Gradle failed; showing the final 240 lines:"
+            tail -n 240 gradle-build.log
+            exit "$result"
+          fi
+          tail -n 80 gradle-build.log
 
       - uses: actions/upload-artifact@v4
         with:
