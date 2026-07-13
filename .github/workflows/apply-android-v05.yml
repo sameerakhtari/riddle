@@ -35,7 +35,7 @@ jobs:
 
       - name: Import Android source bundle
         env:
-          SOURCE_URL: "https://sdmntpraustraliaeast.oaiusercontent.com/files/00000000-8594-71fa-9d2a-95f67c4bee35/raw?se=2026-07-13T15:21:47Z&sp=r&sv=2026-02-06&sr=b&scid=6fdc6782-f7c6-5162-bb7c-4a5a2f3dd0ec&skoid=b7fc319f-b93c-4fac-ba5f-14fdc3f9209f&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-07-13T02:24:49Z&ske=2026-07-15T02:24:49Z&sks=b&skv=2026-02-06&sig=Yz0PimgqnLQvJxEsK6U4ydK7M5vRZKO63KGXqn6x1DE%3D"
+          SOURCE_URL: "https://sdmntpraustraliaeast.oaiusercontent.com/files/00000000-9454-71fa-a9e8-bc190c25561b/raw?se=2026-07-13T15:28:58Z&sp=r&sv=2026-02-06&sr=b&scid=55f9cf8e-f23d-517f-9771-12f02b3388ef&skoid=b7fc319f-b93c-4fac-ba5f-14fdc3f9209f&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-07-13T01:31:58Z&ske=2026-07-15T01:31:58Z&sks=b&skv=2026-02-06&sig=s5jcYLfxcpe1Dzx5xfiljrjzo0Tbwp3nGCR4/F0USb8%3D"
         run: |
           curl --fail --location --retry 3 --output /tmp/source.zip "$SOURCE_URL"
           mkdir -p /tmp/source-artifact
@@ -57,6 +57,18 @@ jobs:
           PY
           python -m py_compile tools/migrate_v05.py
           python tools/migrate_v05.py
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('android/app/src/main/java/com/sameerakhtari/riddle/data/AppSettings.kt')
+          text = path.read_text()
+          start = text.index('    var customInstructions: String')
+          end = text.index('\n    var crossSessionMemory:', start)
+          block = r'''    var customInstructions: String
+              get() = get(KEY_CUSTOM_INSTRUCTIONS, "").take(MAX_CUSTOM_INSTRUCTIONS)
+              set(value) = put(KEY_CUSTOM_INSTRUCTIONS, value.replace("\r\n", "\n").trim().take(MAX_CUSTOM_INSTRUCTIONS))
+          '''
+          path.write_text(text[:start] + block + text[end:])
+          PY
 
       - name: Validate Android XML and backend syntax
         run: |
