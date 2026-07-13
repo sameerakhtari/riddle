@@ -10,8 +10,8 @@ android {
         applicationId = "com.sameerakhtari.riddle"
         minSdk = 26
         targetSdk = 36
-        versionCode = 7
-        versionName = "0.5.1"
+        versionCode = 8
+        versionName = "0.5.2"
     }
 
     buildTypes {
@@ -52,4 +52,6 @@ dependencies {
     implementation("com.google.ai.edge.litertlm:litertlm-android:0.14.0")
     implementation("androidx.work:work-runtime:2.11.2")
     implementation("androidx.documentfile:documentfile:1.1.0")
+
+    testImplementation("junit:junit:4.13.2")
 }
