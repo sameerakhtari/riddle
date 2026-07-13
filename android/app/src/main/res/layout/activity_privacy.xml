@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/privacy_background"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <TextView
+            android:id="@+id/privacyText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans"
+            android:lineSpacingExtra="4dp"
+            android:paddingStart="22dp"
+            android:paddingTop="24dp"
+            android:paddingEnd="22dp"
+            android:paddingBottom="28dp"
+            android:textColor="@color/privacy_text"
+            android:textIsSelectable="true"
+            android:textSize="16sp" />
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/privacy_surface"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <Button
+            android:id="@+id/deleteDiaryDataButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/privacy_danger"
+            android:text="Delete local diary data"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/closePrivacyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:backgroundTint="@color/privacy_heading"
+            android:text="Close"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+</LinearLayout>

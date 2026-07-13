@@ -1,0 +1,9 @@
+services:
+  riddle-oracle:
+    build: .
+    container_name: riddle-oracle
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8787:8787"

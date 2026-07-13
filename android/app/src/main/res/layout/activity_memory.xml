@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/privacy_background"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif"
+        android:text="Diary memory"
+        android:textColor="@color/privacy_heading"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="These short facts help the diary maintain continuity across conversations. They stay on this device unless included in a request to your selected AI provider. Edit or remove anything at any time."
+        android:textColor="@color/privacy_text"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/memoryEditor"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1"
+        android:background="@drawable/privacy_surface_background"
+        android:gravity="top|start"
+        android:inputType="textMultiLine|textCapSentences"
+        android:padding="16dp"
+        android:scrollbars="vertical"
+        android:textColor="@color/privacy_text"
+        android:textColorHint="@color/privacy_muted"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/saveMemoryButton"
+            style="@style/RiddlePrimaryButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="Save memory" />
+
+        <Button
+            android:id="@+id/clearMemoryButton"
+            style="@style/RiddleButton"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Clear" />
+
+        <Button
+            android:id="@+id/closeMemoryButton"
+            style="@style/RiddleButton"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Close" />
+    </LinearLayout>
+</LinearLayout>

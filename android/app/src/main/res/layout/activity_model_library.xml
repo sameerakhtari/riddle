@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/settings_background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="18dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="serif"
+            android:text="On-device model library"
+            android:textColor="@color/diary_gold_bright"
+            android:textSize="29sp"
+            android:textStyle="bold" />
+        <TextView
+            style="@style/RiddleInfoText"
+            android:text="The compatible model list is built into the app and loads without internet. Select a model and tap Download / resume. Custom compatible .litertlm URLs and file imports remain available." />
+
+        <LinearLayout style="@style/RiddleSettingsPanel">
+            <TextView style="@style/RiddlePanelTitle" android:text="Catalog and search" />
+            <EditText
+                android:id="@+id/modelSearchInput"
+                style="@style/RiddleEditText"
+                android:hint="Search model name, file, source, or description"
+                android:inputType="text" />
+            <CheckBox
+                android:id="@+id/visionOnlyCheck"
+                style="@style/RiddleCheckBox"
+                android:checked="true"
+                android:text="Show vision-capable models only" />
+            <EditText
+                android:id="@+id/catalogUrlInput"
+                style="@style/RiddleEditText"
+                android:hint="Bundled catalog"
+                android:inputType="textUri"
+                android:visibility="gone" />
+            <Button
+                android:id="@+id/refreshCatalogButton"
+                style="@style/RiddlePrimaryButton"
+                android:layout_width="match_parent"
+                android:layout_marginTop="8dp"
+                android:text="Reload built-in compatible models" />
+            <TextView
+                android:id="@+id/catalogStatusText"
+                style="@style/RiddleInfoText"
+                android:textIsSelectable="true" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/RiddleSettingsPanel">
+            <TextView style="@style/RiddlePanelTitle" android:text="Select a model" />
+            <Spinner android:id="@+id/modelSpinner" style="@style/RiddleSpinner" />
+            <TextView android:id="@+id/modelDetailsText" style="@style/RiddleInfoText" android:textIsSelectable="true" />
+            <TextView
+                android:id="@+id/modelStatusText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/diary_ink"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+            <ProgressBar
+                android:id="@+id/modelProgress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="8dp"
+                android:max="100"
+                android:progressTint="@color/diary_gold" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
+                <Button android:id="@+id/selectModelButton" style="@style/RiddlePrimaryButton" android:layout_width="0dp" android:layout_weight="1" android:text="Use this model" />
+                <Button android:id="@+id/openModelPageButton" style="@style/RiddleButton" android:layout_width="0dp" android:layout_marginStart="8dp" android:layout_weight="1" android:text="License / details" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout style="@style/RiddleSettingsPanel">
+            <TextView style="@style/RiddlePanelTitle" android:text="Background download" />
+            <TextView style="@style/RiddleInfoText" android:text="Downloads resume from a partial file and continue through Android WorkManager after the diary screen is closed. Android may pause work until the selected network is available." />
+            <EditText android:id="@+id/hfTokenInput" style="@style/RiddleEditText" android:hint="Optional Hugging Face read token" android:inputType="textPassword" />
+            <CheckBox android:id="@+id/wifiOnlyCheck" style="@style/RiddleCheckBox" android:text="Use unmetered / Wi-Fi network only" />
+            <TextView style="@style/RiddleFieldLabel" android:text="Inference backend" />
+            <Spinner android:id="@+id/modelBackendSpinner" style="@style/RiddleSpinner" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:orientation="horizontal">
+                <Button android:id="@+id/downloadModelButton" style="@style/RiddlePrimaryButton" android:layout_width="0dp" android:layout_weight="1" android:text="Download / resume" />
+                <Button android:id="@+id/cancelDownloadButton" style="@style/RiddleButton" android:layout_width="0dp" android:layout_marginStart="8dp" android:layout_weight="1" android:text="Cancel" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout style="@style/RiddleSettingsPanel">
+            <TextView style="@style/RiddlePanelTitle" android:text="Visible folder and manual files" />
+            <TextView android:id="@+id/folderStatusText" style="@style/RiddleInfoText" android:textIsSelectable="true" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:orientation="horizontal">
+                <Button android:id="@+id/chooseFolderButton" style="@style/RiddleButton" android:layout_width="0dp" android:layout_weight="1" android:text="Choose folder" />
+                <Button android:id="@+id/openFolderButton" style="@style/RiddleButton" android:layout_width="0dp" android:layout_marginStart="8dp" android:layout_weight="1" android:drawableStart="@drawable/ic_folder" android:drawablePadding="6dp" android:text="Open folder" />
+            </LinearLayout>
+            <Button android:id="@+id/importModelButton" style="@style/RiddlePrimaryButton" android:layout_width="match_parent" android:layout_marginTop="8dp" android:text="Import .litertlm model from Files" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/RiddleSettingsPanel">
+            <TextView style="@style/RiddlePanelTitle" android:text="Custom models" />
+            <TextView style="@style/RiddleInfoText" android:text="The catalog cannot enumerate every model on the internet. Add any compatible HTTPS LiteRT-LM package or import its file. Compatibility and image support depend on that model." />
+            <Button android:id="@+id/addCustomModelButton" style="@style/RiddlePrimaryButton" android:layout_width="match_parent" android:layout_marginTop="10dp" android:text="Add custom model URL" />
+            <Button android:id="@+id/deleteModelButton" style="@style/RiddleButton" android:layout_width="match_parent" android:layout_marginTop="8dp" android:text="Delete selected model / entry" />
+        </LinearLayout>
+
+        <Button android:id="@+id/closeModelLibraryButton" style="@style/RiddlePrimaryButton" android:layout_width="match_parent" android:layout_marginTop="22dp" android:text="Done" />
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+
+    <uses-feature android:name="android.hardware.touchscreen" android:required="true" />
+    <uses-feature android:name="android.hardware.touchscreen.multitouch" android:required="false" />
+    <uses-feature android:name="android.hardware.touchscreen.stylus" android:required="false" />
+
+    <application
+        android:name=".RiddleApplication"
+        android:allowBackup="false"
+        android:enableOnBackInvokedCallback="true"
+        android:icon="@drawable/ic_launcher_cover"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:roundIcon="@drawable/ic_launcher_cover"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Riddle"
+        android:usesCleartextTraffic="true">
+
+        <uses-native-library android:name="libvndksupport.so" android:required="false" />
+        <uses-native-library android:name="libOpenCL.so" android:required="false" />
+
+        <service
+            android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:foregroundServiceType="dataSync"
+            tools:node="merge" />
+
+        <activity android:name=".InstructionActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".PrivacyActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".MemoryActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".ConversationHistoryActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".GuideActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".LogActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".ModelLibraryActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".SettingsActivity" android:exported="false" android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

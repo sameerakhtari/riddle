@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Transparent outer field; the diary itself fills the adaptive safe zone. -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M0,0H108V108H0Z" />
+
+    <!-- Irregular black leather cover. -->
+    <path
+        android:fillColor="#0A0A09"
+        android:strokeColor="#2B2925"
+        android:strokeWidth="1.4"
+        android:pathData="M13,4L94,5Q101,6 101,14L100,95Q99,103 91,103L15,102Q7,101 7,93L8,13Q8,5 13,4Z" />
+    <path
+        android:fillColor="#181816"
+        android:fillAlpha="0.72"
+        android:pathData="M15,8C34,5 75,6 94,10C91,30 96,70 93,98C68,95 35,100 13,96C17,67 11,34 15,8Z" />
+
+    <!-- Leather grain. -->
+    <path android:fillColor="#00000000" android:strokeColor="#3C3A35" android:strokeAlpha="0.60" android:strokeWidth="0.55"
+        android:pathData="M18,13C28,17 32,11 42,15S57,12 67,16S82,12 93,17M14,22C25,18 31,25 42,21S58,26 69,21S84,25 96,21M14,31C26,35 33,28 45,33S60,29 72,34S86,29 96,34M13,42C26,38 34,45 46,41S61,46 73,41S87,46 96,42M13,53C26,57 34,50 47,55S62,51 75,56S88,51 96,56M13,64C25,60 34,67 46,63S62,68 74,63S88,68 96,64M13,75C26,79 34,72 46,77S62,73 75,78S88,73 96,78M13,87C25,83 34,90 46,86S62,91 74,86S88,91 96,87" />
+    <path android:fillColor="#00000000" android:strokeColor="#050504" android:strokeAlpha="0.85" android:strokeWidth="0.48"
+        android:pathData="M18,10C15,26 22,35 17,49S21,73 17,96M29,8C25,23 32,34 27,48S32,72 27,99M41,8C37,24 44,34 39,50S44,74 40,99M53,7C49,24 56,35 51,51S56,75 52,99M65,7C61,24 68,36 63,51S68,75 64,99M77,7C73,24 80,36 75,51S80,75 76,99M89,8C85,24 92,36 87,51S92,75 88,99" />
+
+    <!-- Aged brass top-left fitting. -->
+    <path
+        android:fillColor="#9A793B"
+        android:strokeColor="#D0AD62"
+        android:strokeWidth="0.7"
+        android:pathData="M8,7L35,7L32,14L27,17L24,24L17,27L13,35L8,37Z" />
+    <path android:fillColor="#604A26" android:pathData="M9,9L29,9L27,13L22,14L21,19L16,21L14,27L9,30Z" />
+    <path android:fillColor="#D4B46B" android:pathData="M16,12L19,17L24,19L19,21L16,27L14,21L10,19L14,17Z" />
+    <path android:fillColor="#171410" android:pathData="M11,10A2,2 0,1 0,15 10A2,2 0,1 0,11 10M18,10A2,2 0,1 0,22 10A2,2 0,1 0,18 10" />
+
+    <!-- Matching lower-left fitting. -->
+    <path
+        android:fillColor="#947238"
+        android:strokeColor="#CFAC60"
+        android:strokeWidth="0.7"
+        android:pathData="M8,77L13,82L16,89L23,92L27,99L36,102L8,102Z" />
+    <path android:fillColor="#5F4925" android:pathData="M9,84L13,87L14,93L20,94L23,100L9,100Z" />
+    <path android:fillColor="#171410" android:pathData="M11,96A2,2 0,1 0,15 96A2,2 0,1 0,11 96M18,98A2,2 0,1 0,22 98A2,2 0,1 0,18 98" />
+
+    <!-- Gold-edged name plate. -->
+    <path
+        android:fillColor="#11110F"
+        android:strokeColor="#C5A252"
+        android:strokeWidth="1"
+        android:pathData="M25,77L83,76L85,89L24,90Z" />
+    <path android:fillColor="#D6B76B" android:pathData="M29,80H33V86H31V82H29ZM36,80H40V82H39V86H37V82H36ZM43,80H47V86H45V82H43ZM50,80H53L55,86H53L52,83L51,86H49ZM58,80H62V82H60V84H62V86H58ZM65,80H69V82H67V86H65ZM72,80H76V82H74V84H76V86H72ZM79,80H82V86H80Z" />
+
+    <!-- Subtle worn spine and edge highlights. -->
+    <path android:fillColor="#00000000" android:strokeColor="#6B6252" android:strokeAlpha="0.48" android:strokeWidth="1.1"
+        android:pathData="M12,39C9,53 12,70 10,86M96,16C99,39 96,66 98,91" />
+</vector>

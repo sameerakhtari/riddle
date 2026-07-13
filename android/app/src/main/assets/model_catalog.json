@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "updated": "2026-07-13",
+  "models": [
+    {
+      "id": "catalog-gemma-3n-e2b",
+      "name": "Gemma 3n E2B IT",
+      "fileName": "gemma-3n-E2B-it-int4.litertlm",
+      "downloadUrl": "https://huggingface.co/google/gemma-3n-E2B-it-litert-lm/resolve/main/gemma-3n-E2B-it-int4.litertlm?download=true",
+      "modelPageUrl": "https://huggingface.co/google/gemma-3n-E2B-it-litert-lm",
+      "expectedSize": "about 3.66 GB",
+      "description": "Multimodal LiteRT-LM package with image input.",
+      "supportsVision": true,
+      "source": "Google / Hugging Face"
+    },
+    {
+      "id": "catalog-gemma-4-e2b",
+      "name": "Gemma 4 E2B IT",
+      "fileName": "gemma-4-E2B-it.litertlm",
+      "downloadUrl": "https://huggingface.co/litert-community/gemma-4-E2B-it-litert-lm/resolve/main/gemma-4-E2B-it.litertlm?download=true",
+      "modelPageUrl": "https://huggingface.co/litert-community/gemma-4-E2B-it-litert-lm",
+      "expectedSize": "about 2.59 GB",
+      "description": "Compact multimodal LiteRT-LM package recommended for the S22 Ultra before trying larger models.",
+      "supportsVision": true,
+      "source": "LiteRT community / Hugging Face"
+    },
+    {
+      "id": "catalog-gemma-4-e4b",
+      "name": "Gemma 4 E4B IT",
+      "fileName": "gemma-4-E4B-it.litertlm",
+      "downloadUrl": "https://huggingface.co/litert-community/gemma-4-E4B-it-litert-lm/resolve/main/gemma-4-E4B-it.litertlm?download=true",
+      "modelPageUrl": "https://huggingface.co/litert-community/gemma-4-E4B-it-litert-lm",
+      "expectedSize": "about 3.66 GB",
+      "description": "Larger multimodal package; experimental on an S22 Ultra because of memory and heat requirements.",
+      "supportsVision": true,
+      "source": "LiteRT community / Hugging Face"
+    }
+  ]
+}
